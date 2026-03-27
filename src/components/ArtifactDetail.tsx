@@ -68,7 +68,7 @@ export const ArtifactDetail: React.FC<ArtifactDetailProps> = ({ artifact, onClos
                             {artifact.name}
                         </h2>
                         <p className="font-sans italic text-museum-gold text-lg">
-                            {artifact.origin} • {artifact.era}
+                            {artifact.category} • {artifact.era}
                         </p>
                     </div>
 
