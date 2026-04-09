@@ -7,7 +7,6 @@ declare module "react" {
             "model-viewer": React.DetailedHTMLProps<
                 React.HTMLAttributes<HTMLElement> & {
                     src?: string;
-                    poster?: string;
                     alt?: string;
                     ar?: boolean | string;
                     "ar-modes"?: string;

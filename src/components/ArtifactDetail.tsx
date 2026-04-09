@@ -55,7 +55,6 @@ export const ArtifactDetail: React.FC<ArtifactDetailProps> = ({ artifact, onClos
                     <div className="w-full h-full border border-museum-gold relative">
                         <ModelViewerComponent
                             src={artifact.modelUrl}
-                            poster={artifact.posterUrl}
                             alt={artifact.name}
                         />
                     </div>
@@ -68,8 +67,14 @@ export const ArtifactDetail: React.FC<ArtifactDetailProps> = ({ artifact, onClos
                             {artifact.name}
                         </h2>
                         <p className="font-sans italic text-museum-gold text-lg">
-                            {artifact.category} • {artifact.era}
+                            {artifact.category}
                         </p>
+                        {artifact.location && (
+                            <p className="font-sans text-sm text-museum-text/70 mt-2">
+                                {artifact.location.placeName}
+                                {artifact.location.zone ? ` · ${artifact.location.zone}` : ""}
+                            </p>
+                        )}
                     </div>
 
                     <div className="w-12 h-1 bg-museum-red my-5"></div>

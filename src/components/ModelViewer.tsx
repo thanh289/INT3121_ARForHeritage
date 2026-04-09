@@ -2,15 +2,13 @@ import React from "react";
 
 interface ModelViewerProps {
     src: string;
-    poster: string;
     alt: string;
 }
 
-export const ModelViewerComponent: React.FC<ModelViewerProps> = ({ src, poster, alt }) => {
+export const ModelViewerComponent: React.FC<ModelViewerProps> = ({ src, alt }) => {
     return (
         <model-viewer
             src={src}
-            poster={poster}
             alt={alt}
             ar
             ar-modes="webxr scene-viewer quick-look"

@@ -29,13 +29,13 @@ export const ArtifactCard: React.FC<ArtifactCardProps> = ({ artifact, onClick, i
 
             if (Math.abs(diff) < 0.01) {
                 currentThetaRef.current = targetThetaRef.current;
-                viewerRef.current.cameraOrbit = `${currentThetaRef.current}deg 90deg 105%`;
+                viewerRef.current.cameraOrbit = `${currentThetaRef.current}deg 60deg 105%`;
                 rafRef.current = null;
                 return;
             }
 
             currentThetaRef.current += diff * 0.08;
-            viewerRef.current.cameraOrbit = `${currentThetaRef.current}deg 90deg 105%`;
+            viewerRef.current.cameraOrbit = `${currentThetaRef.current}deg 60deg 105%`;
             rafRef.current = requestAnimationFrame(() => animateRef.current());
         };
     });
@@ -84,7 +84,6 @@ export const ArtifactCard: React.FC<ArtifactCardProps> = ({ artifact, onClick, i
                         viewerRef.current = el as ModelViewerElement | null;
                     }}
                     src={artifact.modelUrl}
-                    poster={artifact.posterUrl}
                     alt={artifact.name}
                     camera-orbit="0deg 90deg 105%"
                     style={{
@@ -101,7 +100,7 @@ export const ArtifactCard: React.FC<ArtifactCardProps> = ({ artifact, onClick, i
                     {artifact.name}
                 </h3>
                 <p className="font-sans italic text-gray-500 text-sm mt-1">
-                    {artifact.category} • {artifact.era}
+                    {artifact.category}
                 </p>
 
                 <div className="mt-auto pt-5">
