@@ -42,7 +42,7 @@
                                 3DGS
                             </button>
                             <button id="btn-show-mesh" class="button is-small is-rounded">
-                                Digital Mesh
+                                Digital Mesh / AR
                             </button>
                         </div>
 
@@ -51,7 +51,13 @@
                         </div>
 
                         <model-viewer id="mesh-view-container" class="mesh-view" style="display: none;" camera-controls
-                            auto-rotate shadow-intensity="1" background-color="#fafafa">
+                            auto-rotate shadow-intensity="1" background-color="#fafafa" ar
+                            ar-modes="webxr scene-viewer quick-look" ar-scale="auto" ar-placement="floor" xr-environment
+                            touch-action="pan-y">
+                            <button slot="ar-button" class="button is-small ar-slot-button">
+                                <span class="icon"><i class="fas fa-cube"></i></span>
+                                <span>View in AR</span>
+                            </button>
                         </model-viewer>
 
                     </div>
@@ -72,6 +78,37 @@
                                 the public to examine the artifact's surface details, craftsmanship, and material
                                 properties without physical handling.</span>
                         </p>
+                    </div>
+
+                    <hr class="detail-hr">
+
+                    <div class="ar-section">
+                        <p class="subtitle is-6 mb-3 download-section-title">Augmented Reality & Voice Guide:</p>
+                        <div class="buttons">
+                            <button id="btn-open-ar" class="button is-small ar-button-main">
+                                <span class="icon"><i class="fas fa-cube"></i></span>
+                                <span>Start AR</span>
+                            </button>
+                            <button id="btn-read-info" class="button is-small ar-button-secondary">
+                                <span class="icon"><i class="fas fa-volume-up"></i></span>
+                                <span>Read Info</span>
+                            </button>
+                            <button id="btn-stop-voice" class="button is-small ar-button-secondary">
+                                <span class="icon"><i class="fas fa-stop"></i></span>
+                                <span>Stop</span>
+                            </button>
+                        </div>
+
+                        <div class="qr-box mt-3">
+                            <img id="detail-ar-qr" class="qr-image" alt="AR QR code">
+                            <div class="qr-text">
+                                <p class="is-size-7 mb-1"><b>Printable QR</b></p>
+                                <p class="is-size-7">Scan this code to open the AR page for this artifact.</p>
+                                <a id="link-ar-page" href="#" class="is-size-7" target="_blank" rel="noopener">
+                                    Open AR landing page
+                                </a>
+                            </div>
+                        </div>
                     </div>
 
                     <hr class="detail-hr">

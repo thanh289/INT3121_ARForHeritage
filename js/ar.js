@@ -1,21 +1,9 @@
-import { Viewer } from '@mkkellogg/gaussian-splats-3d';
 import { artifacts } from './data.js';
 
 const urlParams = new URLSearchParams(window.location.search);
 const artifactId = urlParams.get('id');
-
 const item = artifacts.find(a => a.id === artifactId);
 let currentUtterance = null;
-
-function getAbsolutePageUrl(pageName, id) {
-    const url = new URL(`../${pageName}`, import.meta.url);
-    url.searchParams.set('id', id);
-    return url.href;
-}
-
-function getQrImageUrl(targetUrl, size = 220) {
-    return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(targetUrl)}`;
-}
 
 function buildNarrationText(artifact) {
     return `${artifact.name.replace(/\n/g, ' ')}. Category: ${artifact.category}. ${artifact.description} Significance: ${artifact.significance}`;
@@ -141,110 +129,52 @@ function createVoiceButtonFrom(baseButton, id, iconClass, label) {
 }
 
 function setupVoiceControlButtons() {
-    const stopButton = document.getElementById('btn-stop-voice');
+    const stopButton = document.getElementById('btn-stop-ar-voice');
     if (!stopButton) return {};
 
-    const pauseButton = createVoiceButtonFrom(stopButton, 'btn-pause-voice', 'fas fa-pause', 'Pause');
-    const continueButton = createVoiceButtonFrom(stopButton, 'btn-continue-voice', 'fas fa-play', 'Continue');
+    const pauseButton = createVoiceButtonFrom(stopButton, 'btn-pause-ar-voice', 'fas fa-pause', 'Pause');
+    const continueButton = createVoiceButtonFrom(stopButton, 'btn-continue-ar-voice', 'fas fa-play', 'Continue');
     setButtonContent(stopButton, 'fas fa-stop', 'Stop');
 
     return { pauseButton, continueButton, stopButton };
 }
 
 if (item) {
-    document.getElementById('detail-name').innerText = item.name;
-    document.getElementById('detail-category').innerText = item.category;
-    document.getElementById('detail-desc').innerText = item.description;
-    document.getElementById('detail-significance').innerText = item.significance;
+    document.title = `${item.name.replace(/\n/g, ' ')} AR`;
+    document.getElementById('ar-detail-name').innerText = item.name;
+    document.getElementById('ar-detail-category').innerText = item.category;
+    document.getElementById('ar-detail-desc').innerText = item.description;
+    document.getElementById('ar-detail-significance').innerText = item.significance;
+    document.getElementById('back-to-detail').href = `detail.html?id=${encodeURIComponent(item.id)}`;
 
-    // Set download links
-    document.getElementById('link-download-ply').href = item.ply;
-    document.getElementById('link-download-glb').href = item.glb;
-
-    const arUrl = getAbsolutePageUrl('ar.html', item.id);
-    document.getElementById('link-ar-page').href = arUrl;
-    document.getElementById('detail-ar-qr').src = getQrImageUrl(arUrl, 220);
-
-    // .glb / AR-capable model-viewer
-    const meshViewer = document.getElementById('mesh-view-container');
-    meshViewer.src = item.glb;
-    meshViewer.alt = `3D model of ${item.name.replace(/\n/g, ' ')}`;
+    const modelViewer = document.getElementById('ar-model-viewer');
+    modelViewer.src = item.glb;
+    modelViewer.alt = `AR model of ${item.name.replace(/\n/g, ' ')}`;
 
     // Optional iOS Quick Look source. Add `usdz: "models/name.usdz"` to data.js if you have it.
     if (item.usdz) {
-        meshViewer.setAttribute('ios-src', item.usdz);
+        modelViewer.setAttribute('ios-src', item.usdz);
     }
 
-    // .ply
-    const splatContainer = document.getElementById('splat-view-container');
-
-    // Khởi tạo Viewer
-    const viewer = new Viewer({
-        'rootElement': splatContainer,
-        'cameraUp': [0, 1, 0],
-        'initialCameraPosition': [0, 1, 2],
-        'initialCameraLookAt': [0, 0, 0],
-        'sharedMemoryForWorkers': false,
-        'useBuiltInSplatLoader': true,
-        'selfDrivenMode': true,
-    });
-
-    viewer.addSplatScene(item.ply, {
-        'showLoadingUI': false,
-        'position': [0, 0, 0],
-        'rotation': [0, 0, 0],
-        'scale': [1, 1, 1]
-    }).then(() => {
-        viewer.start();
-        viewer.renderer.setClearColor(0xffffff, 1);
-        const loading = splatContainer.querySelector('.loading-text');
-        if (loading) loading.remove();
-    })
-        .catch((err) => {
-            console.error('Chi tiết lỗi:', err);
-            const loading = splatContainer.querySelector('.loading-text');
-            if (loading) loading.innerText = 'Error loading file!';
-        });
-
-    const btnSplat = document.getElementById('btn-show-splat');
-    const btnMesh = document.getElementById('btn-show-mesh');
-    const btnOpenAr = document.getElementById('btn-open-ar');
-    const btnReadInfo = document.getElementById('btn-read-info');
     const { pauseButton, continueButton, stopButton } = setupVoiceControlButtons();
 
-    btnSplat.addEventListener('click', () => {
-        updateButtonStyles(btnSplat, btnMesh);
-        splatContainer.style.display = 'block';
-        meshViewer.style.display = 'none';
-    });
-
-    btnMesh.addEventListener('click', () => {
-        updateButtonStyles(btnMesh, btnSplat);
-        splatContainer.style.display = 'none';
-        meshViewer.style.display = 'block';
-    });
-
-    btnReadInfo.addEventListener('click', () => speakArtifactInfo(item));
+    document.getElementById('btn-read-ar-info').addEventListener('click', () => speakArtifactInfo(item));
     if (pauseButton) pauseButton.addEventListener('click', pauseVoice);
     if (continueButton) continueButton.addEventListener('click', continueVoice);
     if (stopButton) stopButton.addEventListener('click', stopVoice);
 
-    btnOpenAr.addEventListener('click', async () => {
-        updateButtonStyles(btnMesh, btnSplat);
-        splatContainer.style.display = 'none';
-        meshViewer.style.display = 'block';
-
+    document.getElementById('btn-start-ar-voice').addEventListener('click', async () => {
         speakArtifactInfo(item);
 
         try {
-            await meshViewer.updateComplete;
-            await meshViewer.activateAR();
+            await modelViewer.updateComplete;
+            await modelViewer.activateAR();
         } catch (error) {
             console.warn('AR could not be launched from this browser/device:', error);
-            window.location.href = arUrl;
+            document.getElementById('ar-support-note').innerText =
+                'AR could not be opened on this device/browser. You can still rotate the 3D model here and listen to the voice guide.';
         }
     });
-
 } else {
     document.querySelector('.container').innerHTML = `
         <div class="has-text-centered mt-6">
@@ -252,16 +182,4 @@ if (item) {
             <a href="index.html" class="button">Return to Gallery</a>
         </div>
     `;
-}
-
-function updateButtonStyles(activeBtn, inactiveBtn) {
-    activeBtn.classList.add('is-active');
-    activeBtn.style.backgroundColor = 'var(--accent-red)';
-    activeBtn.style.color = 'white';
-    activeBtn.style.fontWeight = 'bold';
-
-    inactiveBtn.classList.remove('is-active');
-    inactiveBtn.style.backgroundColor = 'transparent';
-    inactiveBtn.style.color = '#666';
-    inactiveBtn.style.fontWeight = 'normal';
 }
