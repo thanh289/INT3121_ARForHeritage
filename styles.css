@@ -1,0 +1,244 @@
+:root {
+    --bg-color: #fdfbf7;
+    --text-color: #2c241b;
+    --accent-red: #8a1c1c;
+    --accent-gold: #c5a059;
+    --card-bg: #ffffff;
+}
+
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Lora', serif;
+    background-image: radial-gradient(#e0dcd3 1px, transparent 1px);
+    background-size: 20px 20px;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+/* Typography */
+.title {
+    font-family: 'Playfair Display', serif;
+    color: var(--accent-red) !important;
+    letter-spacing: 0.5px;
+}
+
+.subtitle {
+    font-family: 'Playfair Display', serif;
+    color: var(--text-color) !important;
+    font-style: italic;
+    margin-top: 5px !important;
+    display: block;
+}
+
+/* Header Decoration */
+.header-decoration {
+    border-bottom: 3px double var(--accent-gold);
+    padding-bottom: 2rem;
+    margin-bottom: 3rem;
+}
+
+/* Content & Layout */
+.content {
+    line-height: 1.8;
+    text-align: justify;
+}
+
+.section-header {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 2rem;
+    padding-bottom: 10px;
+}
+
+.section-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    background-color: var(--accent-gold);
+}
+
+/* Buttons */
+.buttons .button {
+    border: 1px solid var(--accent-gold);
+    background-color: transparent;
+    color: var(--text-color);
+    font-family: 'Playfair Display', serif;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.buttons .button:hover,
+.buttons .button:focus,
+.buttons .button.is-active {
+    background-color: var(--accent-red);
+    color: white;
+    border-color: var(--accent-red);
+}
+
+/* Artifact Card */
+.artifact-card {
+    background: var(--card-bg);
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 5px 5px 0px rgba(197, 160, 89, 0.2);
+    transition: transform 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.artifact-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-gold);
+}
+
+.artifact-name {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--accent-red);
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    text-align: center;
+    white-space: pre-line;
+}
+
+.artifact-category {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Grid System */
+.artifact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Loading Indicator */
+.loading-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #999;
+    font-size: 0.8rem;
+    font-style: italic;
+    pointer-events: none;
+}
+
+/* Links */
+a { color: var(--accent-red); text-decoration: none; }
+a:hover { color: var(--accent-gold); }
+
+/* Detail page title */
+#detail-name {
+    white-space: pre-line;
+}
+
+/* Model Viewer Default */
+model-viewer {
+    width: 100%;
+    height: 100%;
+    background-color: #fafafa;
+    border-radius: 2px;
+    --poster-color: transparent;
+}
+
+/* Detail Page Specific Styles */
+.back-button {
+    color: var(--accent-red);
+}
+
+.viewer-container {
+    padding: 0;
+    height: 500px;
+    overflow: hidden;
+    position: relative;
+    border: 2px solid var(--accent-gold);
+}
+
+.view-toggle-wrapper {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 5px;
+    border-radius: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+}
+
+.view-toggle-wrapper .button {
+    border: none;
+    background: transparent;
+    color: #666;
+}
+
+.view-toggle-wrapper .button.is-active {
+    background: var(--accent-red);
+    color: white;
+    font-weight: bold;
+}
+
+.splat-view,
+.mesh-view {
+    width: 100%;
+    height: 100%;
+    background: #eee;
+}
+
+.detail-divider {
+    width: 50px;
+    height: 3px;
+    background: var(--accent-red);
+    margin: 0 0 1.5rem 0;
+}
+
+.detail-category {
+    color: var(--accent-gold);
+}
+
+.detail-hr {
+    background-color: var(--accent-gold);
+    opacity: 0.3;
+    margin: 1.5rem 0;
+}
+
+.download-section-title {
+    font-weight: bold;
+    color: var(--accent-red);
+    font-style: normal;
+}
+
+/* Thêm .buttons vào trước để ghi đè thuộc tính background: transparent */
+.buttons .download-button {
+    background-color: var(--accent-red) !important; /* Thêm !important để chắc chắn ăn màu */
+    border-color: var(--accent-red);
+    color: white;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(138, 28, 28, 0.3);
+    opacity: 1; /* Đảm bảo không bị mờ */
+}
+
+.buttons .download-button:hover {
+    background-color: #601313 !important;
+    border-color: #601313;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(96, 19, 19, 0.5);
+}

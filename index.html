@@ -2,16 +2,130 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>int3121-arforheritage</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="styles.css">
+
+    <title>Vietnamese Cultural Heritage 3D Gallery</title>
 </head>
 
 <body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
-  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+    <section class="section">
+
+        <div class="container has-text-centered header-decoration">
+            <p class="title is-2 is-uppercase"> Vietnamese Cultural Heritage </p>
+            <p class="title is-4" style="margin-top: -10px; font-variant-numeric: lining-nums;">3D Gallery</p>
+            <p class="subtitle is-5 mt-4"> "Preserving the Soul of Vietnam in Digital Form" </p>
+
+            <p class="is-size-6 mt-4 is-italic">
+                Curated by:
+                <!-- <a href="#" target="_blank">Hiep Lai-Hoang</a>,
+                <a href="#" target="_blank">Thanh Tran-Duy</a>,
+                <a href="#" target="_blank">Chau Ma-Thi</a> -->
+                <span style="color: var(--accent-red);">Hiep Lai-Hoang</span>,
+                <span style="color: var(--accent-red);">Thanh Tran-Duy</span>,
+                <span style="color: var(--accent-red);">Chau Ma-Thi</span>
+            </p>
+            <p class="is-size-7 mt-1">
+                University of Engineering and Technology, VNU Hanoi
+            </p>
+        </div>
+
+        <div class="container is-max-desktop">
+
+            <div class="has-text-centered">
+                <p class="title is-4 section-header"> Introduction </p>
+            </div>
+            <div class="content is-size-6">
+                <p>
+                    Vietnam's tangible cultural heritage represents a vital record of the creativity and spiritual life
+                    of past generations. <b>Traditional musical instruments</b>, <b>water puppetry figures</b>,
+                    <b>ceramics</b>, and <b>folk toys</b> are at risk of irreversible deterioration.
+                </p>
+                <p>
+                    This digital gallery presents a comprehensive collection of high-fidelity 3D models. These
+                    <i>digital twins</i> serve as a foundational resource for artifact restoration, historical research,
+                    and preserving the cultural knowledge embedded in their craftsmanship.
+                </p>
+            </div>
+
+            <hr style="background-color: var(--accent-gold); opacity: 0.3;">
+
+            <div class="has-text-centered mt-6">
+                <p class="title is-4 section-header"> The Collection </p>
+            </div>
+
+            <div class="columns is-multiline">
+                <div class="column is-6">
+                    <p class="content is-size-6">
+                        <b>Traditional Musical Instruments:</b> Carved from bamboo or wood. Digital preservation
+                        captures intricate internal structures and craftsmanship traditions.
+                    </p>
+                </div>
+                <div class="column is-6">
+                    <p class="content is-size-6">
+                        <b>Water Puppetry Artifacts:</b> Made from lacquered wood. Models preserve expressive faces,
+                        costumes, and the hidden internal mechanisms.
+                    </p>
+                </div>
+                <div class="column is-6">
+                    <p class="content is-size-6">
+                        <b>Vietnamese Ceramics:</b> Models capture vessel geometry, glaze color variation, sheen, and
+                        crazing patterns for virtual restoration.
+                    </p>
+                </div>
+                <div class="column is-6">
+                    <p class="content is-size-6">
+                        <b>Folk Toys & Games:</b> Ephemeral items like bamboo dragonflies and spinning tops. Preserved
+                        to serve as references for future recreation.
+                    </p>
+                </div>
+            </div>
+
+            <div class="has-text-centered mt-6 mb-5">
+                <p class="title is-4 section-header"> Exhibition Hall </p>
+
+                <div class="buttons is-centered mt-4" id="filter-buttons">
+                    <button class="button is-active" data-filter="all">View All</button>
+                    <button class="button" data-filter="Musical Instruments">Musical Instruments</button>
+                    <button class="button" data-filter="Folk Toys">Folk Toys</button>
+                    <button class="button" data-filter="Water Puppetry">Water Puppetry</button>
+                    <button class="button" data-filter="Ceramics">Ceramics</button>
+                    <button class="button" data-filter="Folk Games">Folk Games</button>
+                    <button class="button" data-filter="Handicrafts">Handicrafts</button>
+                </div>
+            </div>
+
+            <div class="artifact-grid" id="gallery-grid">
+            </div>
+
+            <hr style="background-color: var(--accent-gold); opacity: 0.3; margin-top: 3rem;">
+            <div class="has-text-centered mt-5">
+                <p class="title is-4 section-header"> Significance </p>
+            </div>
+            <p class="content is-size-6 has-text-centered is-italic mb-6">
+                "This repository affirms Vietnam's cultural identity globally, preserving the nation's artistic legacy
+                and ensuring future generations can connect with their heritage."
+            </p>
+
+        </div>
+
+        <footer class="footer" style="background-color: #f0ebe0; padding: 3rem 1.5rem;">
+            <div class="content has-text-centered">
+                <p class="is-size-7"><strong>Vietnamese Cultural Heritage 3D Gallery</strong> by UET-VNU Team.</p>
+            </div>
+        </footer>
+
+    </section>
+
+    <script type="module" src="js/main.js"></script>
 
 </body>
 

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <title>Artifact Detail</title>
+
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.1.1/model-viewer.min.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.164.1/build/three.module.js",
+            "@mkkellogg/gaussian-splats-3d": "https://unpkg.com/@mkkellogg/gaussian-splats-3d@0.4.1/build/gaussian-splats-3d.module.js"
+        }
+    }
+    </script>
+</head>
+
+<body>
+    <section class="section">
+        <div class="container is-max-desktop">
+            <a href="index.html" class="button is-ghost mb-4 pl-0" style="color: var(--accent-red);">
+                <span class="icon">←</span> <span>Back to Gallery</span>
+            </a>
+
+            <div class="columns is-variable is-8">
+
+                <div class="column is-7">
+                    <div class="artifact-card viewer-container">
+
+                        <div class="view-toggle-wrapper">
+                            <button id="btn-show-splat" class="button is-small is-rounded is-active">
+                                3DGS
+                            </button>
+                            <button id="btn-show-mesh" class="button is-small is-rounded">
+                                Digital Mesh
+                            </button>
+                        </div>
+
+                        <div id="splat-view-container" class="splat-view">
+                            <div class="loading-text">Loading High-Fidelity Splat...</div>
+                        </div>
+
+                        <model-viewer id="mesh-view-container" class="mesh-view" style="display: none;" camera-controls
+                            auto-rotate shadow-intensity="1" background-color="#fafafa">
+                        </model-viewer>
+
+                    </div>
+                </div>
+
+                <div class="column is-5">
+                    <h1 class="title is-2 mb-2" id="detail-name">Loading...</h1>
+                    <p class="subtitle is-5 mb-2 detail-category" id="detail-category">Category</p>
+
+                    <div class="detail-divider"></div>
+
+                    <div class="content is-size-6">
+                        <p id="detail-desc">
+                            Description details will appear here.
+                        </p>
+                        <p>
+                            <b>Significance:</b> <span id="detail-significance">This digital twin allows researchers and
+                                the public to examine the artifact's surface details, craftsmanship, and material
+                                properties without physical handling.</span>
+                        </p>
+                    </div>
+
+                    <hr class="detail-hr">
+
+                    <div class="download-section">
+                        <p class="subtitle is-6 mb-3 download-section-title">Download Assets:</p>
+                        <div class="buttons">
+                            <a id="link-download-ply" href="#" class="button is-small download-button" download>
+                                <span class="icon"><i class="fas fa-download"></i></span>
+                                <span>3DGS (.ply)</span>
+                            </a>
+                            <a id="link-download-glb" href="#" class="button is-small download-button" download>
+                                <span class="icon"><i class="fas fa-download"></i></span>
+                                <span>Mesh (.glb)</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script type="module" src="js/detail.js"></script>
+</body>
+
+</html>
