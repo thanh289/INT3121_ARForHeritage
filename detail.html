@@ -42,7 +42,7 @@
                                 3DGS
                             </button>
                             <button id="btn-show-mesh" class="button is-small is-rounded">
-                                Digital Mesh / AR
+                                Mesh / AR
                             </button>
                         </div>
 
@@ -87,11 +87,19 @@
                         <div class="buttons">
                             <button id="btn-open-ar" class="button is-small ar-button-main">
                                 <span class="icon"><i class="fas fa-cube"></i></span>
-                                <span>Start AR</span>
+                                <span>Start AR + Voice</span>
                             </button>
                             <button id="btn-read-info" class="button is-small ar-button-secondary">
                                 <span class="icon"><i class="fas fa-volume-up"></i></span>
                                 <span>Read Info</span>
+                            </button>
+                            <button id="btn-pause-voice" class="button is-small ar-button-secondary">
+                                <span class="icon"><i class="fas fa-pause"></i></span>
+                                <span>Pause</span>
+                            </button>
+                            <button id="btn-continue-voice" class="button is-small ar-button-secondary">
+                                <span class="icon"><i class="fas fa-play"></i></span>
+                                <span>Continue</span>
                             </button>
                             <button id="btn-stop-voice" class="button is-small ar-button-secondary">
                                 <span class="icon"><i class="fas fa-stop"></i></span>
@@ -99,13 +107,17 @@
                             </button>
                         </div>
 
+                        <!-- Khôi phục lại khối QR ở đây -->
                         <div class="qr-box mt-3">
                             <img id="detail-ar-qr" class="qr-image" alt="AR QR code">
                             <div class="qr-text">
                                 <p class="is-size-7 mb-1"><b>Printable QR</b></p>
-                                <p class="is-size-7">Scan this code to open the AR page for this artifact.</p>
-                                <a id="link-ar-page" href="#" class="is-size-7" target="_blank" rel="noopener">
-                                    Open AR landing page
+                                <p class="is-size-7">Scan this code to view this artifact on your mobile device.</p>
+                                <!-- Thẻ <a> này đóng vai trò là nút download, giữ ID là btn-download-qr -->
+                                <a id="btn-download-qr"
+                                    style="cursor: pointer; color: var(--accent-red); font-weight: bold;"
+                                    class="is-size-7 mt-1 is-inline-block">
+                                    <i class="fas fa-download"></i> Download QR
                                 </a>
                             </div>
                         </div>

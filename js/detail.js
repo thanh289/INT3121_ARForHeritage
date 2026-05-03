@@ -3,22 +3,52 @@ import { artifacts } from './data.js';
 
 const urlParams = new URLSearchParams(window.location.search);
 const artifactId = urlParams.get('id');
-
 const item = artifacts.find(a => a.id === artifactId);
+
 let currentUtterance = null;
 
-function getAbsolutePageUrl(pageName, id) {
-    const url = new URL(`../${pageName}`, import.meta.url);
-    url.searchParams.set('id', id);
-    return url.href;
-}
-
-function getQrImageUrl(targetUrl, size = 220) {
-    return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(targetUrl)}`;
+function cleanName(name) {
+    return name.replace(/\n/g, ' ');
 }
 
 function buildNarrationText(artifact) {
-    return `${artifact.name.replace(/\n/g, ' ')}. Category: ${artifact.category}. ${artifact.description} Significance: ${artifact.significance}`;
+    return `${cleanName(artifact.name)}. Category: ${artifact.category}. ${artifact.description} Significance: ${artifact.significance}`;
+}
+
+
+function getDetailPageUrl(itemId) {
+    const url = new URL('detail.html', window.location.href);
+    url.searchParams.set('id', itemId);
+    return url.href;
+}
+
+function getQrImageUrl(targetUrl, size = 720) {
+    return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(targetUrl)}`;
+}
+
+async function downloadQrCode(qrImageUrl, fileName) {
+    try {
+        const response = await fetch(qrImageUrl);
+
+        if (!response.ok) {
+            throw new Error(`QR image request failed: ${response.status}`);
+        }
+
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+
+        link.href = blobUrl;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+
+        link.remove();
+        URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+        console.error('Cannot download QR image directly:', err);
+        window.open(qrImageUrl, '_blank', 'noopener');
+    }
 }
 
 function warmUpVoices() {
@@ -122,35 +152,6 @@ function stopVoice() {
     }
 }
 
-function setButtonContent(button, iconClass, label) {
-    button.innerHTML = `
-        <span class="icon"><i class="${iconClass}"></i></span>
-        <span>${label}</span>
-    `;
-}
-
-function createVoiceButtonFrom(baseButton, id, iconClass, label) {
-    const existingButton = document.getElementById(id);
-    if (existingButton) return existingButton;
-
-    const button = baseButton.cloneNode(true);
-    button.id = id;
-    setButtonContent(button, iconClass, label);
-    baseButton.parentNode.insertBefore(button, baseButton);
-    return button;
-}
-
-function setupVoiceControlButtons() {
-    const stopButton = document.getElementById('btn-stop-voice');
-    if (!stopButton) return {};
-
-    const pauseButton = createVoiceButtonFrom(stopButton, 'btn-pause-voice', 'fas fa-pause', 'Pause');
-    const continueButton = createVoiceButtonFrom(stopButton, 'btn-continue-voice', 'fas fa-play', 'Continue');
-    setButtonContent(stopButton, 'fas fa-stop', 'Stop');
-
-    return { pauseButton, continueButton, stopButton };
-}
-
 if (item) {
     document.getElementById('detail-name').innerText = item.name;
     document.getElementById('detail-category').innerText = item.category;
@@ -161,14 +162,15 @@ if (item) {
     document.getElementById('link-download-ply').href = item.ply;
     document.getElementById('link-download-glb').href = item.glb;
 
-    const arUrl = getAbsolutePageUrl('ar.html', item.id);
-    document.getElementById('link-ar-page').href = arUrl;
-    document.getElementById('detail-ar-qr').src = getQrImageUrl(arUrl, 220);
+    // THÊM ĐOẠN NÀY: Hiển thị hình ảnh QR lên web
+    const detailPageUrl = getDetailPageUrl(item.id);
+    const qrImageUrl = getQrImageUrl(detailPageUrl, 720);
+    document.getElementById('detail-ar-qr').src = qrImageUrl;
 
     // .glb / AR-capable model-viewer
     const meshViewer = document.getElementById('mesh-view-container');
     meshViewer.src = item.glb;
-    meshViewer.alt = `3D model of ${item.name.replace(/\n/g, ' ')}`;
+    meshViewer.alt = `3D model of ${cleanName(item.name)}`;
 
     // Optional iOS Quick Look source. Add `usdz: "models/name.usdz"` to data.js if you have it.
     if (item.usdz) {
@@ -209,8 +211,11 @@ if (item) {
     const btnSplat = document.getElementById('btn-show-splat');
     const btnMesh = document.getElementById('btn-show-mesh');
     const btnOpenAr = document.getElementById('btn-open-ar');
+    const btnDownloadQr = document.getElementById('btn-download-qr');
     const btnReadInfo = document.getElementById('btn-read-info');
-    const { pauseButton, continueButton, stopButton } = setupVoiceControlButtons();
+    const btnPauseVoice = document.getElementById('btn-pause-voice');
+    const btnContinueVoice = document.getElementById('btn-continue-voice');
+    const btnStopVoice = document.getElementById('btn-stop-voice');
 
     btnSplat.addEventListener('click', () => {
         updateButtonStyles(btnSplat, btnMesh);
@@ -225,9 +230,15 @@ if (item) {
     });
 
     btnReadInfo.addEventListener('click', () => speakArtifactInfo(item));
-    if (pauseButton) pauseButton.addEventListener('click', pauseVoice);
-    if (continueButton) continueButton.addEventListener('click', continueVoice);
-    if (stopButton) stopButton.addEventListener('click', stopVoice);
+    btnDownloadQr.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const detailPageUrl = getDetailPageUrl(item.id);
+        const qrImageUrl = getQrImageUrl(detailPageUrl, 720);
+        await downloadQrCode(qrImageUrl, `${item.id}-detail-qr.png`);
+    });
+    btnPauseVoice.addEventListener('click', pauseVoice);
+    btnContinueVoice.addEventListener('click', continueVoice);
+    btnStopVoice.addEventListener('click', stopVoice);
 
     btnOpenAr.addEventListener('click', async () => {
         updateButtonStyles(btnMesh, btnSplat);
@@ -241,7 +252,7 @@ if (item) {
             await meshViewer.activateAR();
         } catch (error) {
             console.warn('AR could not be launched from this browser/device:', error);
-            window.location.href = arUrl;
+            alert('AR is not available on this browser/device. Please try Chrome on Android or Safari on iOS.');
         }
     });
 

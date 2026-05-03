@@ -243,15 +243,6 @@ model-viewer {
     box-shadow: 0 6px 15px rgba(96, 19, 19, 0.5);
 }
 /* AR + QR additions */
-.card-action-row {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-}
-
-.ar-button-card,
 .ar-button-main,
 .ar-slot-button {
     background-color: var(--accent-red) !important;
@@ -260,7 +251,6 @@ model-viewer {
     box-shadow: 0 4px 10px rgba(138, 28, 28, 0.25);
 }
 
-.ar-button-card:hover,
 .ar-button-main:hover,
 .ar-slot-button:hover {
     background-color: #601313 !important;
@@ -280,21 +270,37 @@ model-viewer {
     color: white !important;
 }
 
-.card-qr-box {
-    text-align: center;
-    border-top: 1px solid rgba(197, 160, 89, 0.25);
-    padding-top: 0.75rem;
+.ar-section {
     width: 100%;
 }
 
-.card-qr-image {
-    width: 86px;
-    height: 86px;
-    padding: 5px;
-    background: white;
-    border: 1px solid rgba(197, 160, 89, 0.5);
+.ar-slot-button {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    z-index: 5;
+    font-family: 'Playfair Display', serif;
 }
 
+.qr-title {
+    font-size: 0.75rem;
+    color: #666;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+}
+
+.btn-download-qr {
+    font-family: 'Playfair Display', serif;
+}
+
+.btn-download-qr:hover {
+    background-color: var(--accent-red) !important;
+    border-color: var(--accent-red) !important;
+    color: white !important;
+}
+
+
+/* Khôi phục lại giao diện hộp QR */
 .qr-box {
     display: flex;
     gap: 0.9rem;
@@ -316,52 +322,9 @@ model-viewer {
     line-height: 1.4;
 }
 
-.ar-section {
-    width: 100%;
-}
-
-.ar-slot-button {
-    position: absolute;
-    right: 16px;
-    bottom: 16px;
-    z-index: 5;
-    font-family: 'Playfair Display', serif;
-}
-
-.ar-page-section {
-    min-height: 100vh;
-}
-
-.ar-landing-viewer-card {
-    height: 70vh;
-    min-height: 420px;
-    padding: 0;
-    overflow: hidden;
-    border: 2px solid var(--accent-gold);
-}
-
-.ar-landing-viewer {
-    width: 100%;
-    height: 100%;
-}
-
-.ar-support-note {
-    color: #666;
-    line-height: 1.5;
-}
-
+/* Responsive cho điện thoại */
 @media (max-width: 768px) {
     .qr-box {
         align-items: flex-start;
-    }
-
-    .ar-landing-viewer-card {
-        height: 55vh;
-        min-height: 360px;
-    }
-
-    .card-qr-image {
-        width: 76px;
-        height: 76px;
     }
 }

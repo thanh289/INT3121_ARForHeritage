@@ -2,14 +2,8 @@ import { artifacts } from './data.js';
 
 const gridContainer = document.getElementById('gallery-grid');
 
-function getAbsolutePageUrl(pageName, id) {
-    const url = new URL(pageName, window.location.href);
-    url.searchParams.set('id', id);
-    return url.href;
-}
-
-function getQrImageUrl(targetUrl, size = 180) {
-    return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(targetUrl)}`;
+function getDetailUrl(itemId) {
+    return `detail.html?id=${encodeURIComponent(itemId)}`;
 }
 
 function createCardHTML(item) {
@@ -17,9 +11,7 @@ function createCardHTML(item) {
     div.className = 'artifact-item';
     div.setAttribute('data-category', item.category);
 
-    const detailUrl = `detail.html?id=${encodeURIComponent(item.id)}`;
-    const arUrl = getAbsolutePageUrl('ar.html', item.id);
-    const qrUrl = getQrImageUrl(arUrl, 160);
+    const detailUrl = getDetailUrl(item.id);
 
     div.innerHTML = `
         <div class="artifact-card" style="cursor: pointer;">
@@ -38,22 +30,18 @@ function createCardHTML(item) {
             <p class="artifact-name">${item.name}</p>
             <p class="artifact-category">${item.category}</p>
 
-            <div class="card-action-row mt-3">
-                <a href="${detailUrl}" class="button is-small is-outlined" style="border-color: var(--accent-gold); color: var(--accent-red);">
-                    Explore Details
-                </a>
-                <a href="${arUrl}" class="button is-small ar-button-card" title="Open AR page">
-                    AR
-                </a>
-            </div>
+            <a href="${detailUrl}" class="button is-small is-outlined mt-3" style="border-color: var(--accent-gold); color: var(--accent-red);">
+                Explore Details
+            </a>
         </div>
     `;
 
     const card = div.querySelector('.artifact-card');
     card.addEventListener('click', (e) => {
-        if (e.target.tagName === 'A' || e.target.closest('a') || e.target.closest('button')) {
+        if (e.target.tagName === 'A' || e.target.closest('a')) {
             return;
         }
+
         window.location.href = detailUrl;
     });
 
