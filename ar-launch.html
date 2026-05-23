@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>AR Launch</title>
+
+    <style>
+        :root {
+            --bg-color: #fdfbf7;
+            --text-color: #2c241b;
+            --accent-red: #8a1c1c;
+            --accent-gold: #c5a059;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Lora', serif;
+            background-image: radial-gradient(#e0dcd3 1px, transparent 1px);
+            background-size: 20px 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            box-shadow: 6px 6px 0px rgba(197, 160, 89, 0.25);
+            max-width: 420px;
+            width: 100%;
+            padding: 2.5rem 2rem 2rem;
+            text-align: center;
+            border-top: 4px solid var(--accent-red);
+        }
+
+        .logo-line {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            margin-bottom: 1.5rem;
+        }
+
+        .artifact-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--accent-red);
+            line-height: 1.25;
+            margin-bottom: 0.4rem;
+            white-space: pre-line;
+        }
+
+        .artifact-category {
+            font-style: italic;
+            color: var(--accent-gold);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .divider {
+            width: 50px;
+            height: 2px;
+            background: var(--accent-red);
+            margin: 0 auto 1.5rem;
+        }
+
+        .status-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            background: #fdf6ec;
+            border: 1px solid rgba(197, 160, 89, 0.4);
+            border-radius: 6px;
+            padding: 0.9rem 1.2rem;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            margin-bottom: 2rem;
+            min-height: 56px;
+        }
+
+        .status-icon {
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(138, 28, 28, 0.2);
+            border-top-color: var(--accent-red);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .btn-ar {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background-color: var(--accent-red);
+            color: #fff;
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            border: none;
+            padding: 0.85rem 2rem;
+            cursor: pointer;
+            width: 100%;
+            letter-spacing: 0.5px;
+            transition: background 0.2s;
+            box-shadow: 0 4px 12px rgba(138, 28, 28, 0.3);
+            text-decoration: none;
+        }
+
+        .btn-ar:hover {
+            background-color: #601313;
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: transparent;
+            color: var(--accent-red);
+            font-family: 'Lora', serif;
+            font-size: 0.85rem;
+            border: 1px solid var(--accent-gold);
+            padding: 0.65rem 1.5rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 0.75rem;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-red);
+            border-color: var(--accent-red);
+            color: #fff;
+        }
+
+        .hint {
+            font-size: 0.75rem;
+            color: #999;
+            margin-top: 1.5rem;
+            font-style: italic;
+            line-height: 1.5;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* iOS AR Quick Look anchor — hidden visually, activated programmatically */
+        #ios-ar-anchor {
+            display: none;
+        }
+
+        .os-badge {
+            display: inline-block;
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: rgba(197, 160, 89, 0.15);
+            color: var(--accent-gold);
+            border: 1px solid rgba(197, 160, 89, 0.4);
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <p class="logo-line">AR Tourism · Digital Museum</p>
+
+        <h1 class="artifact-name" id="ar-name">Loading…</h1>
+        <p class="artifact-category" id="ar-category"></p>
+        <div class="divider"></div>
+
+        <div class="status-box" id="status-box">
+            <div class="spinner"></div>
+            <span id="status-text">Detecting your device…</span>
+        </div>
+
+        <!-- Android: Scene Viewer intent link (hidden, clicked programmatically) -->
+        <a id="android-intent-link" class="hidden"></a>
+
+        <!-- iOS: AR Quick Look anchor (rel=ar) -->
+        <a id="ios-ar-anchor" rel="ar" href="#">
+            <img src="" alt="" style="display:none">
+        </a>
+
+        <!-- Fallback manual button shown if auto-launch fails -->
+        <div id="manual-section" class="hidden">
+            <span id="os-badge-el" class="os-badge"></span>
+            <a id="btn-launch-ar" class="btn-ar">
+                <i class="fas fa-cube"></i>
+                <span id="btn-ar-label">View in AR</span>
+            </a>
+            <a id="btn-detail-page" class="btn-secondary">
+                <i class="fas fa-arrow-left"></i> View Full Details
+            </a>
+            <p class="hint" id="ar-hint"></p>
+        </div>
+
+        <!-- Always-visible fallback after a timeout -->
+        <div id="fallback-section" class="hidden">
+            <a id="btn-detail-fallback" class="btn-secondary">
+                <i class="fas fa-arrow-left"></i> View Full Details Instead
+            </a>
+            <p class="hint">AR requires Chrome on Android or Safari on iOS with a WebXR-capable device.</p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { artifacts } from './js/data.js';
+
+        const BASE = 'https://ar-for-heritage.vercel.app';
+
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        const item = artifacts.find(a => a.id === id);
+
+        const nameEl = document.getElementById('ar-name');
+        const categoryEl = document.getElementById('ar-category');
+        const statusBox = document.getElementById('status-box');
+        const statusText = document.getElementById('status-text');
+        const manualSec = document.getElementById('manual-section');
+        const fallbackSec = document.getElementById('fallback-section');
+        const osBadgeEl = document.getElementById('os-badge-el');
+        const btnLaunch = document.getElementById('btn-launch-ar');
+        const btnLabel = document.getElementById('btn-ar-label');
+        const btnDetail = document.getElementById('btn-detail-page');
+        const btnDetFall = document.getElementById('btn-detail-fallback');
+        const arHint = document.getElementById('ar-hint');
+
+        function detailUrl(itemId) {
+            return `${BASE}/detail.html?id=${encodeURIComponent(itemId)}`;
+        }
+
+        function setStatus(icon, text) {
+            statusBox.innerHTML = `<span class="status-icon">${icon}</span><span>${text}</span>`;
+        }
+
+        function showManual() {
+            statusBox.classList.add('hidden');
+            manualSec.classList.remove('hidden');
+        }
+
+        function showFallback() {
+            fallbackSec.classList.remove('hidden');
+        }
+
+        if (!item) {
+            nameEl.textContent = 'Artifact Not Found';
+            setStatus('⚠️', 'Invalid QR code or artifact ID.');
+            showFallback();
+            btnDetFall.href = `${BASE}/index.html`;
+        } else {
+            nameEl.textContent = item.name;
+            categoryEl.textContent = item.category;
+            btnDetail.href = detailUrl(item.id);
+            btnDetFall.href = detailUrl(item.id);
+
+            const glbUrl = `${BASE}/${item.glb}`;
+            const usdzUrl = item.usdz ? `${BASE}/${item.usdz}` : null;
+
+            // ── OS detection ───────────────────────────────────────────────
+            const ua = navigator.userAgent || '';
+            const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+            const isAndroid = /Android/.test(ua);
+            const isMobile = isIOS || isAndroid;
+
+            setStatus('🔍', 'Checking AR support…');
+
+            if (isAndroid) {
+                // ── Android: Google Scene Viewer intent ──────────────────
+                osBadgeEl.textContent = 'Android · Scene Viewer';
+                btnLabel.textContent = 'Open in AR (Android)';
+                arHint.textContent = 'Opens Google Scene Viewer. Requires Google Play Services for AR.';
+
+                const intentUrl =
+                    `intent://arvr.google.com/scene-viewer/1.0` +
+                    `?file=${encodeURIComponent(glbUrl)}` +
+                    `&mode=ar_preferred` +
+                    `&title=${encodeURIComponent(item.name.replace(/\n/g, ' '))}` +
+                    `#Intent;scheme=https;` +
+                    `package=com.google.android.googlequicksearchbox;` +
+                    `action=android.intent.action.VIEW;` +
+                    `S.browser_fallback_url=${encodeURIComponent(detailUrl(item.id))};` +
+                    `end;`;
+
+                const intentLink = document.getElementById('android-intent-link');
+                intentLink.href = intentUrl;
+
+                btnLaunch.href = intentUrl;
+
+                // Auto-launch after short delay
+                setStatus('🚀', 'Launching AR…');
+                setTimeout(() => {
+                    intentLink.click();
+                    // Show manual button after a moment in case intent didn't open
+                    setTimeout(() => {
+                        setStatus('📱', 'If AR did not open automatically, tap the button below.');
+                        showManual();
+                        // Show full fallback after more time
+                        setTimeout(showFallback, 6000);
+                    }, 2500);
+                }, 800);
+
+            } else if (isIOS) {
+                // ── iOS: AR Quick Look (needs USDZ ideally, falls back to GLB) ──
+                osBadgeEl.textContent = 'iOS · AR Quick Look';
+
+                const iosAnchor = document.getElementById('ios-ar-anchor');
+
+                if (usdzUrl) {
+                    // Best: USDZ file
+                    iosAnchor.href = usdzUrl;
+                    btnLaunch.href = usdzUrl;
+                    btnLaunch.setAttribute('rel', 'ar');
+                    btnLabel.textContent = 'Open in AR (iOS)';
+                    arHint.textContent = 'Opens AR Quick Look. Point your camera at a flat surface.';
+
+                    setStatus('🚀', 'Opening AR Quick Look…');
+                    setTimeout(() => {
+                        iosAnchor.click();
+                        setTimeout(() => {
+                            setStatus('📱', 'If AR did not open, tap the button below.');
+                            showManual();
+                            setTimeout(showFallback, 6000);
+                        }, 2000);
+                    }, 800);
+
+                } else {
+                    // No USDZ: iOS can't do native AR Quick Look with GLB
+                    // Best fallback: open detail page with model-viewer (WebXR)
+                    setStatus('📱', 'No USDZ file available. Opening detail page for AR…');
+                    osBadgeEl.textContent = 'iOS · WebAR';
+                    btnLabel.textContent = 'Open Detail Page (tap AR button inside)';
+                    btnLaunch.href = detailUrl(item.id);
+                    arHint.textContent = 'On the detail page, tap "Start AR + Voice" to launch AR via WebXR.';
+
+                    setTimeout(() => {
+                        // Auto-redirect to detail page for iOS without USDZ
+                        window.location.href = detailUrl(item.id) + '&autoar=1';
+                    }, 1500);
+                }
+
+            } else {
+                // ── Desktop / unknown: show info + link to detail ────────
+                setStatus('🖥️', 'AR works on mobile devices. Scan this QR with your phone.');
+                osBadgeEl.textContent = 'Desktop';
+                btnLabel.textContent = 'View 3D Model';
+                btnLaunch.href = detailUrl(item.id);
+                arHint.textContent = 'For the best AR experience, scan the QR code with an Android or iOS device.';
+                showManual();
+                showFallback();
+            }
+
+            // Global fallback: after 12s, always show fallback links
+            setTimeout(showFallback, 12000);
+        }
+    </script>
+</body>
+
+</html>
