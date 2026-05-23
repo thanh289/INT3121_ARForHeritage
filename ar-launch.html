@@ -11,7 +11,6 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>AR Launch</title>
-
     <style>
         :root {
             --bg-color: #fdfbf7;
@@ -94,13 +93,8 @@
             padding: 0.9rem 1.2rem;
             font-size: 0.9rem;
             color: var(--text-color);
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             min-height: 56px;
-        }
-
-        .status-icon {
-            font-size: 1.1rem;
-            flex-shrink: 0;
         }
 
         .spinner {
@@ -170,18 +164,13 @@
         .hint {
             font-size: 0.75rem;
             color: #999;
-            margin-top: 1.5rem;
+            margin-top: 1.25rem;
             font-style: italic;
             line-height: 1.5;
         }
 
         .hidden {
             display: none !important;
-        }
-
-        /* iOS AR Quick Look anchor — hidden visually, activated programmatically */
-        #ios-ar-anchor {
-            display: none;
         }
 
         .os-badge {
@@ -196,13 +185,16 @@
             border-radius: 20px;
             margin-bottom: 1rem;
         }
+
+        #ios-ar-anchor {
+            display: none;
+        }
     </style>
 </head>
 
 <body>
     <div class="card">
         <p class="logo-line">AR Tourism · Digital Museum</p>
-
         <h1 class="artifact-name" id="ar-name">Loading…</h1>
         <p class="artifact-category" id="ar-category"></p>
         <div class="divider"></div>
@@ -212,16 +204,12 @@
             <span id="status-text">Detecting your device…</span>
         </div>
 
-        <!-- Android: Scene Viewer intent link (hidden, clicked programmatically) -->
+        <!-- Hidden helpers -->
         <a id="android-intent-link" class="hidden"></a>
+        <a id="ios-ar-anchor" rel="ar" href="#"><img src="" alt="" style="display:none"></a>
 
-        <!-- iOS: AR Quick Look anchor (rel=ar) -->
-        <a id="ios-ar-anchor" rel="ar" href="#">
-            <img src="" alt="" style="display:none">
-        </a>
-
-        <!-- Fallback manual button shown if auto-launch fails -->
-        <div id="manual-section" class="hidden">
+        <!-- Single action section, shown after detection -->
+        <div id="action-section" class="hidden">
             <span id="os-badge-el" class="os-badge"></span>
             <a id="btn-launch-ar" class="btn-ar">
                 <i class="fas fa-cube"></i>
@@ -231,14 +219,6 @@
                 <i class="fas fa-arrow-left"></i> View Full Details
             </a>
             <p class="hint" id="ar-hint"></p>
-        </div>
-
-        <!-- Always-visible fallback after a timeout -->
-        <div id="fallback-section" class="hidden">
-            <a id="btn-detail-fallback" class="btn-secondary">
-                <i class="fas fa-arrow-left"></i> View Full Details Instead
-            </a>
-            <p class="hint">AR requires Chrome on Android or Safari on iOS with a WebXR-capable device.</p>
         </div>
     </div>
 
@@ -254,14 +234,11 @@
         const nameEl = document.getElementById('ar-name');
         const categoryEl = document.getElementById('ar-category');
         const statusBox = document.getElementById('status-box');
-        const statusText = document.getElementById('status-text');
-        const manualSec = document.getElementById('manual-section');
-        const fallbackSec = document.getElementById('fallback-section');
+        const actionSec = document.getElementById('action-section');
         const osBadgeEl = document.getElementById('os-badge-el');
         const btnLaunch = document.getElementById('btn-launch-ar');
         const btnLabel = document.getElementById('btn-ar-label');
         const btnDetail = document.getElementById('btn-detail-page');
-        const btnDetFall = document.getElementById('btn-detail-fallback');
         const arHint = document.getElementById('ar-hint');
 
         function detailUrl(itemId) {
@@ -269,46 +246,36 @@
         }
 
         function setStatus(icon, text) {
-            statusBox.innerHTML = `<span class="status-icon">${icon}</span><span>${text}</span>`;
+            statusBox.innerHTML = `<span style="font-size:1.1rem;flex-shrink:0">${icon}</span><span>${text}</span>`;
         }
 
-        function showManual() {
+        function showActions() {
             statusBox.classList.add('hidden');
-            manualSec.classList.remove('hidden');
-        }
-
-        function showFallback() {
-            fallbackSec.classList.remove('hidden');
+            actionSec.classList.remove('hidden');
         }
 
         if (!item) {
             nameEl.textContent = 'Artifact Not Found';
             setStatus('⚠️', 'Invalid QR code or artifact ID.');
-            showFallback();
-            btnDetFall.href = `${BASE}/index.html`;
+            osBadgeEl.textContent = 'Error';
+            btnLabel.textContent = 'Go to Gallery';
+            btnLaunch.href = `${BASE}/index.html`;
+            btnDetail.classList.add('hidden');
+            showActions();
         } else {
             nameEl.textContent = item.name;
             categoryEl.textContent = item.category;
             btnDetail.href = detailUrl(item.id);
-            btnDetFall.href = detailUrl(item.id);
 
             const glbUrl = `${BASE}/${item.glb}`;
             const usdzUrl = item.usdz ? `${BASE}/${item.usdz}` : null;
 
-            // ── OS detection ───────────────────────────────────────────────
             const ua = navigator.userAgent || '';
             const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
             const isAndroid = /Android/.test(ua);
-            const isMobile = isIOS || isAndroid;
-
-            setStatus('🔍', 'Checking AR support…');
 
             if (isAndroid) {
-                // ── Android: Google Scene Viewer intent ──────────────────
-                osBadgeEl.textContent = 'Android · Scene Viewer';
-                btnLabel.textContent = 'Open in AR (Android)';
-                arHint.textContent = 'Opens Google Scene Viewer. Requires Google Play Services for AR.';
-
+                // ── Android: Scene Viewer ────────────────────────────────
                 const intentUrl =
                     `intent://arvr.google.com/scene-viewer/1.0` +
                     `?file=${encodeURIComponent(glbUrl)}` +
@@ -320,76 +287,51 @@
                     `S.browser_fallback_url=${encodeURIComponent(detailUrl(item.id))};` +
                     `end;`;
 
-                const intentLink = document.getElementById('android-intent-link');
-                intentLink.href = intentUrl;
-
+                document.getElementById('android-intent-link').href = intentUrl;
                 btnLaunch.href = intentUrl;
+                osBadgeEl.textContent = 'Android · Scene Viewer';
+                btnLabel.textContent = 'Open in AR';
+                arHint.textContent = 'Opens Google Scene Viewer. Requires Google Play Services for AR.';
 
-                // Auto-launch after short delay
                 setStatus('🚀', 'Launching AR…');
                 setTimeout(() => {
-                    intentLink.click();
-                    // Show manual button after a moment in case intent didn't open
-                    setTimeout(() => {
-                        setStatus('📱', 'If AR did not open automatically, tap the button below.');
-                        showManual();
-                        // Show full fallback after more time
-                        setTimeout(showFallback, 6000);
-                    }, 2500);
-                }, 800);
+                    document.getElementById('android-intent-link').click();
+                    // Show manual button after delay in case intent didn't fire
+                    setTimeout(showActions, 2500);
+                }, 600);
 
-            } else if (isIOS) {
-                // ── iOS: AR Quick Look (needs USDZ ideally, falls back to GLB) ──
-                osBadgeEl.textContent = 'iOS · AR Quick Look';
-
+            } else if (isIOS && usdzUrl) {
+                // ── iOS with USDZ: AR Quick Look ─────────────────────────
                 const iosAnchor = document.getElementById('ios-ar-anchor');
+                iosAnchor.href = usdzUrl;
+                btnLaunch.href = usdzUrl;
+                btnLaunch.setAttribute('rel', 'ar');
+                osBadgeEl.textContent = 'iOS · AR Quick Look';
+                btnLabel.textContent = 'Open in AR';
+                arHint.textContent = 'Opens AR Quick Look. Point your camera at a flat surface.';
 
-                if (usdzUrl) {
-                    // Best: USDZ file
-                    iosAnchor.href = usdzUrl;
-                    btnLaunch.href = usdzUrl;
-                    btnLaunch.setAttribute('rel', 'ar');
-                    btnLabel.textContent = 'Open in AR (iOS)';
-                    arHint.textContent = 'Opens AR Quick Look. Point your camera at a flat surface.';
+                setStatus('🚀', 'Opening AR Quick Look…');
+                setTimeout(() => {
+                    iosAnchor.click();
+                    setTimeout(showActions, 2000);
+                }, 600);
 
-                    setStatus('🚀', 'Opening AR Quick Look…');
-                    setTimeout(() => {
-                        iosAnchor.click();
-                        setTimeout(() => {
-                            setStatus('📱', 'If AR did not open, tap the button below.');
-                            showManual();
-                            setTimeout(showFallback, 6000);
-                        }, 2000);
-                    }, 800);
-
-                } else {
-                    // No USDZ: iOS can't do native AR Quick Look with GLB
-                    // Best fallback: open detail page with model-viewer (WebXR)
-                    setStatus('📱', 'No USDZ file available. Opening detail page for AR…');
-                    osBadgeEl.textContent = 'iOS · WebAR';
-                    btnLabel.textContent = 'Open Detail Page (tap AR button inside)';
-                    btnLaunch.href = detailUrl(item.id);
-                    arHint.textContent = 'On the detail page, tap "Start AR + Voice" to launch AR via WebXR.';
-
-                    setTimeout(() => {
-                        // Auto-redirect to detail page for iOS without USDZ
-                        window.location.href = detailUrl(item.id) + '&autoar=1';
-                    }, 1500);
-                }
+            } else if (isIOS && !usdzUrl) {
+                // ── iOS without USDZ: redirect to detail page ────────────
+                setStatus('📱', 'Redirecting to AR viewer…');
+                setTimeout(() => {
+                    window.location.href = detailUrl(item.id) + '&autoar=1';
+                }, 1200);
 
             } else {
-                // ── Desktop / unknown: show info + link to detail ────────
-                setStatus('🖥️', 'AR works on mobile devices. Scan this QR with your phone.');
+                // ── Desktop ──────────────────────────────────────────────
                 osBadgeEl.textContent = 'Desktop';
                 btnLabel.textContent = 'View 3D Model';
                 btnLaunch.href = detailUrl(item.id);
-                arHint.textContent = 'For the best AR experience, scan the QR code with an Android or iOS device.';
-                showManual();
-                showFallback();
+                arHint.textContent = 'For the best AR experience, scan this QR code with your Android or iOS phone.';
+                setStatus('🖥️', 'AR works on mobile. Scan the QR with your phone.');
+                showActions();
             }
-
-            // Global fallback: after 12s, always show fallback links
-            setTimeout(showFallback, 12000);
         }
     </script>
 </body>
