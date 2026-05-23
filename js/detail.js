@@ -249,7 +249,7 @@ if (item) {
     meshViewer.addEventListener('ar-status', (e) => {
         const status = e.detail?.status;
 
-        if (status === 'object-placed') {
+        if (status === 'session-started' || status === 'object-placed') {
             // AR is live and model placed → start narration with subtitles
             speakArtifactInfo(item, { withSubtitles: true });
         }
